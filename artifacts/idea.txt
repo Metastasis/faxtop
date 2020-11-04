@@ -1,14 +1,82 @@
 {
-	selectors:{
-		price: {
-		  xpath: '',
-		  transform: 'upperCase'
-		},
-		title: {
-		  xpath: '',
-		  transform: (title) => title.toUpperCase()
-		}
-	}
+    _meta: {
+      version: '1',
+      url: 'https://example.com'
+    },
+    price: {
+      selector: {
+        css: '#uniqueId'
+      },
+      transform: (price) => Number(price)
+    },
+    title: {
+      selector: {
+        css: '#uniqueTitleId'
+      },
+      transform: (title) => price.toLowerCase()
+    }
 }
 
+
 on top of that build UI, that will generate such configs
+
+============================
+
+
+{
+  "_meta": {
+    "version": "1",
+    "url": "https://ru.tradingview.com"
+  },
+  "currencyIdeas": {
+    "@path": "/markets/currencies/ideas",
+    "advises": {
+      "@selector": {
+        "@css": "tv-feed__item js_cb_class tv-feed-layout__card-item js-feed__item--inited"
+      },
+      "currency": {
+        "@selector": {
+          "@css": "tv-widget-idea__symbol apply-overflow-tooltip"
+        },
+        "@extract": {
+          "@type": "text"
+        }
+      },
+      "position": {
+        "@selector": {
+          "@css": "tv-idea-label tv-widget-idea__label tv-idea-label--long"
+        },
+        "@extract": {
+          "@type": "text"
+        }
+      },
+      "createdAt": {
+        "@selector": {
+          "@css": "tv-card-stats__time"
+        },
+        "@extract": {
+          "@type": "attr",
+          "@attr": "title"
+        }
+      }
+    }
+  }
+}
+
+
+{
+  "_meta": {
+    "version": "1",
+    "url": "https://ru.tradingview.com"
+  },
+  "currencyIdeas": {
+    "_meta": {
+      "path": "/markets/currencies/ideas"
+    },
+    "advises": [
+      {currency: 'USDRUB', position: 'ДЛИННАЯ', createdAt: '4 ноября - 2013 г'},
+      {currency: 'USDRUB', position: 'КОРОТКАЯ', createdAt: '4 ноября - 2013 г'}
+      {currency: 'EURUSD', position: 'ДЛИННАЯ', createdAt: '4 ноября - 2013 г'}
+    ]
+  }
+}

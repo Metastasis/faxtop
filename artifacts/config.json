@@ -1,0 +1,45 @@
+{
+  "@meta": {
+    "version": 1,
+    "url": "https://ru.tradingview.com"
+  },
+  "currencyIdeas": {
+    "@path": "/markets/currencies/ideas",
+    "advises": {
+      "@tag": "nested",
+      "@selector": {
+        "@css": "tv-feed__item js_cb_class tv-feed-layout__card-item js-feed__item--inited"
+      },
+      "@fields": {
+        "currency": {
+          "@tag": "leaf",
+          "@selector": {
+            "@css": "tv-widget-idea__symbol apply-overflow-tooltip"
+          },
+          "@extract": {
+            "@type": "text"
+          }
+        },
+        "position": {
+          "@tag": "leaf",
+          "@selector": {
+            "@css": "tv-idea-label tv-widget-idea__label tv-idea-label--long"
+          },
+          "@extract": {
+            "@type": "text"
+          }
+        },
+        "createdAt": {
+          "@tag": "leaf",
+          "@selector": {
+            "@css": "tv-card-stats__time"
+          },
+          "@extract": {
+            "@type": "attr",
+            "@attr": "title"
+          }
+        }
+      }
+    }
+  }
+}
