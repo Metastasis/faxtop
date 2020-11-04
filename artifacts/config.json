@@ -6,38 +6,32 @@
   "currencyIdeas": {
     "@path": "/markets/currencies/ideas",
     "advises": {
-      "@tag": "nested",
       "@selector": {
         "@css": "tv-feed__item js_cb_class tv-feed-layout__card-item js-feed__item--inited"
       },
-      "@fields": {
-        "currency": {
-          "@tag": "leaf",
-          "@selector": {
-            "@css": "tv-widget-idea__symbol apply-overflow-tooltip"
-          },
-          "@extract": {
-            "@type": "text"
-          }
+      "currency": {
+        "@selector": {
+          "@css": "tv-widget-idea__symbol apply-overflow-tooltip"
         },
-        "position": {
-          "@tag": "leaf",
-          "@selector": {
-            "@css": "tv-idea-label tv-widget-idea__label tv-idea-label--long"
-          },
-          "@extract": {
-            "@type": "text"
-          }
+        "@extract": {
+          "@type": "text"
+        }
+      },
+      "position": {
+        "@selector": {
+          "@css": "tv-idea-label tv-widget-idea__label tv-idea-label--long"
         },
-        "createdAt": {
-          "@tag": "leaf",
-          "@selector": {
-            "@css": "tv-card-stats__time"
-          },
-          "@extract": {
-            "@type": "attr",
-            "@attr": "title"
-          }
+        "@extract": {
+          "@type": "text"
+        }
+      },
+      "createdAt": {
+        "@selector": {
+          "@css": "tv-card-stats__time"
+        },
+        "@extract": {
+          "@type": "attr",
+          "@attr": "title"
         }
       }
     }

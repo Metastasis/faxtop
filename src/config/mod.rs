@@ -35,12 +35,12 @@ pub struct ObjectLeaf {
 pub struct ObjectComplex {
     #[serde(rename(deserialize = "@selector"))]
     pub selector: Selector,
-    #[serde(rename(deserialize = "@fields"))]
+    #[serde(flatten)]
     pub fields: HashMap<String, Value>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(tag = "@tag")]
+#[serde(untagged)]
 pub enum Value {
     #[serde(rename(deserialize = "nested"))]
     Nested(ObjectComplex),
