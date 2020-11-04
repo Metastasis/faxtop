@@ -1,0 +1,14 @@
+{
+	selectors:{
+		price: {
+		  xpath: '',
+		  transform: 'upperCase'
+		},
+		title: {
+		  xpath: '',
+		  transform: (title) => title.toUpperCase()
+		}
+	}
+}
+
+on top of that build UI, that will generate such configs
