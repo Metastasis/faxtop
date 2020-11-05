@@ -1,5 +1,8 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::fs;
+use std::convert;
+use std::path;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub enum Selector {
@@ -57,6 +60,12 @@ pub struct Pages {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+pub struct Meta {
+    pub version: u8,
+    pub url: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct CrawlConfig {
     #[serde(rename(deserialize = "@meta"))]
     pub meta: Meta,
@@ -64,8 +73,11 @@ pub struct CrawlConfig {
     pub pages: HashMap<String, Pages>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Meta {
-    pub version: u8,
-    pub url: String,
+impl convert::TryFrom<path::PathBuf> for CrawlConfig {
+    type Error = serde_json::Error;
+
+    fn try_from(path: path::PathBuf) -> Result<Self, Self::Error> {
+        let config_str = fs::read_to_string(path).unwrap();
+        serde_json::from_str(config_str.as_str())
+    }
 }

@@ -7,11 +7,11 @@
     "@path": "/markets/currencies/ideas",
     "advises": {
       "@selector": {
-        "@css": "tv-feed__item js_cb_class tv-feed-layout__card-item js-feed__item--inited"
+        "@css": ".tv-feed__item.js_cb_class.tv-feed-layout__card-item"
       },
       "currency": {
         "@selector": {
-          "@css": "tv-widget-idea__symbol apply-overflow-tooltip"
+          "@css": ".tv-widget-idea__symbol.apply-overflow-tooltip"
         },
         "@extract": {
           "@type": "text"
@@ -19,7 +19,7 @@
       },
       "position": {
         "@selector": {
-          "@css": "tv-idea-label tv-widget-idea__label tv-idea-label--long"
+          "@css": ".tv-idea-label.tv-widget-idea__label"
         },
         "@extract": {
           "@type": "text"
@@ -27,7 +27,7 @@
       },
       "createdAt": {
         "@selector": {
-          "@css": "tv-card-stats__time"
+          "@css": ".tv-card-stats__time"
         },
         "@extract": {
           "@type": "attr",

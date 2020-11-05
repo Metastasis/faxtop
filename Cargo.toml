@@ -9,3 +9,6 @@ edition = "2018"
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.59"
+reqwest = { version = "0.10.8", features = ["blocking", "json"] }
+tokio = { version = "0.2.22", features = ["full"] }
+scraper = "0.12.0"
