@@ -5,6 +5,32 @@
   },
   "currencyIdeas": {
     "@path": "/markets/currencies/ideas",
+    "test": {
+      "@selector": {
+        "@css": ".tv-widget-idea__symbol.apply-overflow-tooltip"
+      },
+      "@extract": {
+        "@type": "text"
+      }
+    },
+    "too": {
+      "@selector": {
+        "@css": ".tv-feed-filter-list__item.tv-feed-rounded-button--desktop.tv-feed-rounded-button"
+      },
+      "deep": {
+        "@selector": {
+          "@css": ".tv-feed-rounded-button__buttons-container"
+        },
+        "extraction": {
+          "@selector": {
+            "@css": ".tv-feed-rounded-button__text.tv-feed-layout__item.tv-feed-layout__item--only-at-least-two-columns"
+          },
+          "@extract": {
+            "@type": "text"
+          }
+        }
+      }
+    },
     "advises": {
       "@selector": {
         "@css": ".tv-feed__item.js_cb_class.tv-feed-layout__card-item"
