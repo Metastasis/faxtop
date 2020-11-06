@@ -2,10 +2,10 @@ mod config;
 
 use config::{CrawlConfig, Value};
 use reqwest;
-use std::path;
 use scraper::{Html, Selector};
-use std::convert::TryFrom;
 use std::collections::HashMap;
+use std::convert::TryFrom;
+use std::path;
 
 #[tokio::main]
 async fn main() {
@@ -33,9 +33,7 @@ async fn main() {
                 let mut r: HashMap<&str, String> = HashMap::new();
                 for (key, value) in &obj.fields {
                     match value {
-                        Value::Nested(_obj) => {
-                            unimplemented!()
-                        },
+                        Value::Nested(_obj) => unimplemented!(),
                         Value::Leaf(obj) => {
                             let slctr_str = get_selector2(&obj.selector);
                             let slctr = Selector::parse(slctr_str).unwrap();
@@ -43,35 +41,29 @@ async fn main() {
                             part.for_each(|el| {
                                 r.insert(key, el.inner_html());
                             })
-                        },
+                        }
                     }
                 }
                 println!("{:#?}", r);
-            },
-            Value::Leaf(_obj) => {
-                unimplemented!()
-            },
+            }
+            Value::Leaf(_obj) => unimplemented!(),
         }
     }
 }
 
 fn get_selector(page_part: &Value) -> &str {
     match page_part {
-        Value::Nested(obj) => {
-            match &obj.selector {
-                config::Selector::Css(s) => s.as_str()
-            }
+        Value::Nested(obj) => match &obj.selector {
+            config::Selector::Css(s) => s.as_str(),
         },
-        Value::Leaf(obj) => {
-            match &obj.selector {
-                config::Selector::Css(s) => s.as_str()
-            }
-        }
+        Value::Leaf(obj) => match &obj.selector {
+            config::Selector::Css(s) => s.as_str(),
+        },
     }
 }
 
 fn get_selector2(selector: &config::Selector) -> &str {
     match selector {
-        config::Selector::Css(s) => s
+        config::Selector::Css(s) => s,
     }
 }
