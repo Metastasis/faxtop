@@ -52,7 +52,7 @@ pub enum Value {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct Pages {
+pub struct Page {
     #[serde(rename(deserialize = "@path"))]
     pub path: String,
     #[serde(flatten)]
@@ -70,7 +70,7 @@ pub struct CrawlConfig {
     #[serde(rename(deserialize = "@meta"))]
     pub meta: Meta,
     #[serde(flatten)]
-    pub pages: HashMap<String, Pages>,
+    pub pages: HashMap<String, Page>,
 }
 
 impl convert::TryFrom<path::PathBuf> for CrawlConfig {

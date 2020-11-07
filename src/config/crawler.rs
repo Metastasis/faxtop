@@ -30,7 +30,7 @@ impl Crawler {
     }
 }
 
-fn parse_page(mut result: &mut serde_json::Value, page: &config::Pages, document: &scraper::Html) {
+fn parse_page(mut result: &mut serde_json::Value, page: &config::Page, document: &scraper::Html) {
     for (value_name, value) in &page.data {
         parse_section(&mut result, value_name, value, &document.root_element());
     }
