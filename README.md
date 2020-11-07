@@ -1,11 +1,10 @@
-# Faxtop
+# Faxtop (WIP)
 
-Utility to map website content to object model.
-It is a website crawler that can be configured.
+Website crawler that can be configured.
 
 ### Scripts
 
-`cargo run` - Run
+`cargo run` - Run main() script
 
 `cargo build` - Build artifacts
 
