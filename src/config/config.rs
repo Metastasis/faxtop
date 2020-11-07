@@ -31,7 +31,6 @@ pub struct ObjectLeaf {
     pub selector: Selector,
     #[serde(rename(deserialize = "@extract"))]
     pub extract: Extractor,
-    // pub value: Option<Value>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -82,6 +81,14 @@ impl convert::TryFrom<path::PathBuf> for CrawlConfig {
     }
 }
 
+impl convert::TryFrom<&str> for CrawlConfig {
+    type Error = serde_json::Error;
+
+    fn try_from(config_str: &str) -> Result<Self, Self::Error> {
+        serde_json::from_str(config_str)
+    }
+}
+
 pub fn get_selector(page_part: &Value) -> &str {
     match page_part {
         Value::Nested(obj) => match &obj.selector {
@@ -96,5 +103,106 @@ pub fn get_selector(page_part: &Value) -> &str {
 pub fn get_selector2(selector: &Selector) -> &str {
     match selector {
         Selector::Css(s) => s,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::config::config::{CrawlConfig, Extractor, Selector, Value};
+    use std::convert::TryFrom;
+
+    #[test]
+    fn it_works() {
+        let config_str = r#"
+        {
+          "@meta": {
+            "version": 1,
+            "url": "https://crates.io"
+          }
+        }
+        "#;
+        let result = CrawlConfig::try_from(config_str);
+        match result {
+            Ok(r) => {
+                assert_eq!(r.meta.version, 1);
+                assert_eq!(r.meta.url, "https://crates.io");
+            }
+            Err(error) => {
+                eprintln!("{}", error);
+                panic!();
+            }
+        }
+    }
+
+    #[test]
+    fn it_supports_page_with_simple_selectors() {
+        let config_str = r#"
+        {
+          "@meta": {
+            "version": 1,
+            "url": "https://crates.io"
+          },
+          "serdeCrate": {
+            "@path": "/crates/serde",
+            "title": {
+              "@selector": {
+                "@css": "._heading_87huyj h1"
+              },
+              "@extract": {
+                "@type": "text"
+              }
+            },
+            "titleClassname": {
+              "@selector": {
+                "@css": "._heading_87huyj"
+              },
+              "@extract": {
+                "@type": "attr",
+                "@attr": "class"
+              }
+            }
+          }
+        }
+        "#;
+        let result = CrawlConfig::try_from(config_str);
+        match result {
+            Ok(r) => {
+                let page = r.pages.get("serdeCrate").unwrap();
+                let title = page.data.get("title").unwrap();
+                let leaf = if let Value::Leaf(result) = title {
+                    result
+                } else {
+                    panic!();
+                };
+                assert_eq!(r.meta.url, "https://crates.io");
+                assert_eq!(page.path, "/crates/serde");
+                match &leaf.selector {
+                    Selector::Css(slctr) => assert_eq!(slctr, "._heading_87huyj h1"),
+                }
+                match leaf.extract {
+                    Extractor::InnerText => assert!(true),
+                    _ => unimplemented!(),
+                }
+                let title_class = page.data.get("titleClassname").unwrap();
+                let leaf = if let Value::Leaf(result) = title_class {
+                    result
+                } else {
+                    panic!();
+                };
+                match &leaf.selector {
+                    Selector::Css(slctr) => assert_eq!(slctr, "._heading_87huyj"),
+                }
+                match &leaf.extract {
+                    Extractor::Attr(attr) => {
+                        assert_eq!(attr.name, "class");
+                    },
+                    _ => unimplemented!(),
+                };
+            }
+            Err(error) => {
+                eprintln!("{}", error);
+                panic!();
+            }
+        }
     }
 }
