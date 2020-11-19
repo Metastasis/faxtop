@@ -20,6 +20,8 @@
 
 on top of that build UI, that will generate such configs
 
+2. no-code platforms are raising. They need data. Typically today they store it google sheets, air table, etc. I could create integratin points + webhooks
+
 ============================
 
 

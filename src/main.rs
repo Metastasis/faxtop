@@ -1,18 +1,29 @@
-mod config;
+mod handlers;
+mod vars;
 
-use crate::config::{config::CrawlConfig, crawler::Crawler};
-use std::convert::TryFrom;
-use std::path;
+extern crate log;
 
-#[tokio::main]
-async fn main() {
-    let path_to_cfg = path::Path::new(file!())
-        .parent()
-        .unwrap()
-        .join("../artifacts/config.json");
-    // println!("{}", path_to_cfg.to_str().unwrap());
-    let crawl_cfg = CrawlConfig::try_from(path_to_cfg).unwrap();
-    let site_model = Crawler::run(&crawl_cfg).await;
-    println!("{:#?}", site_model.data);
-    // db.save(parsed_site.into()).await;
+use actix_web::{web, App, HttpServer};
+
+#[actix_rt::main]
+async fn main() -> std::io::Result<()> {
+    std::env::set_var("RUST_LOG", "actix_web=debug");
+    env_logger::init();
+    let client_options = mongodb::options::ClientOptions::parse(vars::database_url().as_str())
+        .await
+        .unwrap();
+    let client = mongodb::Client::with_options(client_options).unwrap();
+    let db = client.database("faxtop");
+    for collection_name in db.list_collection_names(None).await.unwrap() {
+        println!("{}", collection_name);
+    }
+    HttpServer::new(move || {
+        App::new()
+            .route("/crawlers", web::get().to(handlers::get_crawlers))
+            .route("/crawlers", web::post().to(handlers::add_crawler))
+            .route("/crawlers/{id}", web::get().to(handlers::get_crawler_by_id))
+    })
+    .bind("127.0.0.1:3000")?
+    .run()
+    .await
 }

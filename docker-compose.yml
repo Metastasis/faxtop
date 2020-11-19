@@ -1,0 +1,48 @@
+version: "3.7"
+services:
+#  app:
+#    container_name: norte-backend
+#    build: .
+#    environment:
+#      PORT: 3001
+#      NODE_ENV: production
+#      MONGO_URL: mongodb://norte2:norte2@mongo/norte
+#    ports:
+#      - 3001:3001
+#    depends_on:
+#      - "mongo"
+#    networks:
+#      - norte-net
+
+  mongo:
+    container_name: "faxtop-mongodb"
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: faxtopRoot
+      MONGO_INITDB_ROOT_PASSWORD: faxtopRoot
+      MONGO_INITDB_DATABASE: faxtop
+    volumes:
+      - "faxtopdata:/data/db"
+      - "./mongo-entrypoint/:/docker-entrypoint-initdb.d/"
+    ports:
+      - 27017:27017
+    networks:
+      - app-network
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: faxtopRoot
+      ME_CONFIG_MONGODB_ADMINPASSWORD: faxtopRoot
+    networks:
+      - app-network
+    depends_on:
+      - "mongo"
+
+volumes:
+  faxtopdata:
+networks:
+  app-network:
+    driver: bridge
