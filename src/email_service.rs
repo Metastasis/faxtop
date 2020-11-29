@@ -28,7 +28,7 @@ pub fn send_confirmation_mail(confirmation: &Confirmation) -> Result<(), AuthErr
     );
     let email = EmailBuilder::new()
         .to(confirmation.email.clone())
-        .from(("noreply@auth-service.com", vars::smtp_sender_name()))
+        .from(("noreply@faxtop.io", vars::smtp_sender_name()))
         .subject("Complete registration")
         .text(plain_text)
         .html(html_text)
@@ -38,16 +38,17 @@ pub fn send_confirmation_mail(confirmation: &Confirmation) -> Result<(), AuthErr
         .min_protocol_version(Some(Protocol::Tlsv10))
         .build()
         .unwrap();
-    let tls_parameters = ClientTlsParameters::new(smtp_host.clone(), tls_connect);
+    let _tls_parameters = ClientTlsParameters::new(smtp_host.clone(), tls_connect);
     let mut mailer = SmtpClient::new(
         (smtp_host.as_str(), vars::smtp_port()),
-        ClientSecurity::Required(tls_parameters),
+        // ClientSecurity::Required(tls_parameters),
+        ClientSecurity::None,
     )
     .unwrap()
-    .credentials(smtp::authentication::Credentials::new(
-        vars::smtp_username(),
-        vars::smtp_password(),
-    ))
+    // .credentials(smtp::authentication::Credentials::new(
+    //     vars::smtp_username(),
+    //     vars::smtp_password(),
+    // ))
     .connection_reuse(smtp::ConnectionReuseParameters::ReuseUnlimited)
     .transport();
     let result = mailer.send(email.into());

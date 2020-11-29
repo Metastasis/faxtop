@@ -16,15 +16,17 @@ pub fn port() -> String {
     var("FAXTOP_PORT").unwrap_or(String::from("3000"))
 }
 
-// pub fn secret_key() -> String {
-//     dotenv().ok();
-//     var("FAXTOP_SECRET_KEY").unwrap_or_else(|_| "0123".repeat(8))
-// }
+#[allow(dead_code)]
+pub fn secret_key() -> String {
+    var("FAXTOP_SECRET_KEY").unwrap_or_else(|_| "0123".repeat(8))
+}
 
+#[allow(dead_code)]
 pub fn smtp_username() -> String {
     var("FAXTOP_SMTP_USERNAME").expect("FAXTOP_SMTP_USERNAME is not set")
 }
 
+#[allow(dead_code)]
 pub fn smtp_password() -> String {
     var("FAXTOP_SMTP_PASSWORD").expect("FAXTOP_SMTP_PASSWORD is not set")
 }
@@ -43,5 +45,5 @@ pub fn smtp_port() -> u16 {
 
 #[allow(dead_code)]
 pub fn smtp_sender_name() -> String {
-    var("SMTP_SENDER_NAME").expect("SMTP_SENDER_NAME is not set")
+    var("FAXTOP_SMTP_SENDER_NAME").expect("FAXTOP_SMTP_SENDER_NAME is not set")
 }

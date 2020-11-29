@@ -1,0 +1,15 @@
+POST http://localhost:3000/api/register
+Origin: http://localhost:3000
+Content-Type: application/json
+
+{"email":"d1mq44@gmail.com"}
+
+###
+
+POST http://localhost:3000/api/register/8c7c4688-95c6-4b4f-9b69-19c48f496c44
+Origin: http://localhost:3000
+Content-Type: application/json
+
+{"password":"test"}
+
+###

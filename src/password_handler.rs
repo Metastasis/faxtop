@@ -12,6 +12,7 @@ use mongodb::{
 use serde::Deserialize;
 use std::str::FromStr;
 use uuid::Uuid;
+use chrono::{Utc, NaiveDateTime};
 
 #[derive(Debug, Deserialize)]
 pub struct PasswordData {
@@ -57,17 +58,17 @@ async fn create_user(
     let document = result.unwrap();
     let id = document.get("id").and_then(Bson::as_str);
     let email = document.get("email").and_then(Bson::as_str);
-    let expires_at = document.get("expiresAt").and_then(Bson::as_str);
+    let expires_at = document.get("expiresAt").and_then(Bson::as_i64);
     if id.is_none() || email.is_none() || expires_at.is_none() {
         return Err(AuthError::GenericError(String::from("Bad request")));
     }
+    let at = NaiveDateTime::from_timestamp(expires_at.unwrap(), 0);
     let confirmation = Confirmation {
         id: Uuid::from_str(id.unwrap()).unwrap(),
         email: email.unwrap().to_string(),
-        expires_at: chrono::NaiveDateTime::from_str(expires_at.unwrap()).unwrap(),
+        expires_at: chrono::DateTime::from_utc(at, Utc),
     };
-    if confirmation.expires_at > chrono::Local::now().naive_local() {
-        // confirmation has not expired
+    if confirmation.expires_at > chrono::Utc::now() {
         let password: String = hash_password(password)?;
         let user = User::from(confirmation.email, password);
         let res = db

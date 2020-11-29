@@ -1,13 +1,15 @@
 use mongodb::bson::doc;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use chrono::Utc;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct User {
     pub id: Uuid,
     pub email: String,
     pub hash: String,
-    pub created_at: chrono::NaiveDateTime,
+    #[serde(rename(deserialize = "createdAt"))]
+    pub created_at: chrono::DateTime<Utc>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -20,7 +22,8 @@ pub struct SessionUser {
 pub struct Confirmation {
     pub id: Uuid,
     pub email: String,
-    pub expires_at: chrono::NaiveDateTime,
+    #[serde(rename(deserialize = "expiresAt"))]
+    pub expires_at: chrono::DateTime<Utc>,
 }
 
 impl From<User> for SessionUser {
@@ -34,7 +37,7 @@ impl From<Confirmation> for mongodb::bson::Document {
         doc!(
             "id": (confirmation.id.to_string()),
             "email": (confirmation.email),
-            "expiresAt": (confirmation.expires_at.to_string())
+            "expiresAt": (confirmation.expires_at.timestamp_millis())
         )
     }
 }
@@ -45,7 +48,7 @@ impl User {
             id: Uuid::new_v4(),
             email: email.into(),
             hash: pwd.into(),
-            created_at: chrono::Local::now().naive_local(),
+            created_at: chrono::Utc::now(),
         }
     }
 }
@@ -70,7 +73,7 @@ where
         Confirmation {
             id: Uuid::new_v4(),
             email: email.into(),
-            expires_at: chrono::Local::now().naive_local() + chrono::Duration::hours(24),
+            expires_at: chrono::Utc::now() + chrono::Duration::hours(24),
         }
     }
 }

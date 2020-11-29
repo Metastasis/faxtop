@@ -12,7 +12,8 @@ pub fn verify(hash: &str, password: &str) -> Result<(), error::AuthError> {
 }
 
 pub fn is_signed_in(session: &actix_session::Session) -> bool {
-    match get_current_user(session) {
+    let result = get_current_user(session);
+    match result {
         Ok(_) => true,
         _ => false,
     }
