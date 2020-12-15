@@ -4,3 +4,5 @@ lib
 .idea
 target
 .env
+faxtopdata
+mongodata
